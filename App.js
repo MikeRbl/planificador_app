@@ -1,38 +1,63 @@
-import { useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
-import Header from './src/components/Header';
-import NuevoPresupuesto from './src/components/NuevoPresupuesto';
+import React, { useState } from 'react';
+import { SafeAreaView, View, Alert, StyleSheet } from 'react-native';
 
-export default function App() {
-  // Inicializamos el estado del presupuesto en 0
-  const [presupuesto, setPresupuesto] = useState(0);
+import NuevoPresupuesto from './src/components/NuevoPresupuesto';
+import ControlPresupuesto from './src/components/ControlPresupuesto';
+import FormularioGasto from './src/components/FormularioGasto';
+import Header from './src/components/Header'; // Tu Header original
+
+const App = () => {
+  const [presupuesto, setPresupuesto] = useState('');
+  const [isValidPresupuesto, setIsValidPresupuesto] = useState(false);  
+  const [gastos, setGastos] = useState([]);
+
+  const handlePresupuesto = () => {
+    const presupuestoNumerico = Number(presupuesto);
+    
+    if (isNaN(presupuestoNumerico) || presupuestoNumerico <= 0) {
+      Alert.alert('Error', 'El presupuesto no es válido. Debe ser mayor a 0.');
+      return;
+    }
+    
+    setIsValidPresupuesto(true);
+  };
+
+  const handleGasto = (gasto) => {
+    setGastos([...gastos, gasto]);
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Header />
-        
-        <NuevoPresupuesto 
-          presupuesto={presupuesto}
-          setPresupuesto={setPresupuesto}
-        />
+    <SafeAreaView style={styles.contenedor}>
+      <Header /> {/* Agregado para mantener el título de tu app */}
+      <View>
+        {isValidPresupuesto ? (
+          <>
+            <ControlPresupuesto 
+              presupuesto={presupuesto} 
+              gastos={gastos} 
+            />
+            <FormularioGasto 
+              handleGasto={handleGasto} 
+            />
+          </>
+        ) : (
+          <NuevoPresupuesto
+            presupuesto={presupuesto}
+            setPresupuesto={setPresupuesto}
+            handlePresupuesto={handlePresupuesto}
+          />
+        )}
       </View>
-
-      <StatusBar style="auto" />
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F5F5F5', // Un gris muy claro para contrastar y mantener el diseño limpio
-  },
-  header: {
-    backgroundColor: '#3b82f6', // Excelente elección de azul para una interfaz minimalista
-    paddingTop: 50, // Un poco de espacio arriba (útil en iOS/Android)
-    paddingBottom: 40,
-    alignItems: 'center',
-  },
+  contenedor: { 
+    flex: 1, 
+    backgroundColor: '#F5F5F5' 
+  }
 });
+
+// ¡ESTA ES LA LÍNEA CRÍTICA QUE EVITA EL ERROR "got: object"!
+export default App;

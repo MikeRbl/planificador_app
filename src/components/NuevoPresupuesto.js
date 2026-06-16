@@ -1,85 +1,53 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Pressable, StyleSheet, Alert } from 'react-native';
+import React from 'react';
+import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
 
-function NuevoPresupuesto() {
-    // Inicializamos como string vacío para evitar warnings en el TextInput
-    const [presupuesto, setPresupuesto] = useState(''); 
-
-    // Función para manejar la validación del botón
-    const handlePresupuesto = () => {
-        // Convertimos el texto a número
-        const numero = Number(presupuesto);
-
-        if (isNaN(numero) || numero <= 0) {
-            Alert.alert('Error', 'Presupuesto inválido');
-            return;
-        }
-
-        console.log("Es un presupuesto valido");
-        // Aquí es donde normalmente enviarías el dato válido al componente padre (App.js)
-    };
-
+const NuevoPresupuesto = ({ presupuesto, setPresupuesto, handlePresupuesto }) => {
   return (
     <View style={styles.contenedor}>
-        <Text style={styles.label}>Agregar Presupuesto</Text>
-        
-        <TextInput
-            style={styles.input}
-            keyboardType='numeric'
-            placeholder='Agregar tu presupuesto: Ej. 5000'
-            placeholderTextColor='#bababa'
-            value={presupuesto}
-            onChangeText={setPresupuesto}
-        />    
-
-        <Pressable 
-            style={styles.boton}
-            onPress={handlePresupuesto}
-        >
-            <Text style={styles.btnTexto}>Agregar Presupuesto</Text>
-        </Pressable>
+      <Text style={styles.titulo}>Definir Presupuesto</Text>
+      
+      <TextInput
+        style={styles.input}
+        keyboardType="numeric"
+        placeholder="Agrega tu presupuesto"
+        value={presupuesto.toString()}
+        onChangeText={setPresupuesto}
+      />
+      
+      <Pressable style={styles.boton} onPress={handlePresupuesto}>
+        <Text style={styles.botonTexto}>Añadir Presupuesto</Text>
+      </Pressable>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  contenedor: {
-    backgroundColor: '#fff', // Corregido: añadido entre comillas
-    paddingHorizontal: 20,
-    paddingVertical: 40,
-    shadowColor: "#000",
-    shadowOffset: {
-        width: 0,
-        height: 1,
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-    elevation: 3,
+  contenedor:{
+    padding: 20
   },
-  label: {
+  titulo:{
     textAlign: 'center',
-    fontSize: 40,
-    color: '#3b82f6',
+    fontSize: 20,
     marginBottom: 10,
+    color: '#3b82f6'
   },
-  input: {
-    backgroundColor: "#F5F5F5",
+  input:{
+    backgroundColor: '#fff',
     padding: 10,
     borderRadius: 10,
-    textAlign: "center",
-    marginTop: 30
+    marginBottom: 15,
+    textAlign: 'center'
   },
   boton:{
-    marginTop: 30,
     backgroundColor: '#1048A4',
     padding: 10,
     borderRadius: 10
   },
-  btnTexto:{
-    color: '#FFF',
+  botonTexto:{
+    color: '#fff',
     textAlign: 'center',
-    textTransform: 'uppercase',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    textTransform: 'uppercase'
   }
 });
 
